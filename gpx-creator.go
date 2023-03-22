@@ -22,8 +22,6 @@ func main() {
 	if err != nil {
 		log.Fatalln("failed to open file", err)
 	}
-	// w := csv.NewWriter(file)
-	// defer w.Flush()
 
 	var head = `<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <gpx version="1.1" creator="franzi/gpx-creator" >
