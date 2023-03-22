@@ -41,7 +41,7 @@ func main() {
 	defer file.Close()
 	tracedata, err := csv.NewReader(csvFile).ReadAll()
 	if err != nil {
-		// handle error
+		log.Fatal(err)
 	}
 
 	for i, row := range tracedata {
