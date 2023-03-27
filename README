@@ -7,4 +7,4 @@ Th gpx-converter is a tool to convert a CSV containing `lat` and `lon` columns t
 $ gpx-converter <path-to-csv>
 ```
 
-The output file and path is the same as the input file, but with the extension `.gpx`.
+The output filename and path is the same as the input file, but with the extension `.gpx`.
