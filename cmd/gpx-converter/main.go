@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func main() {
@@ -15,9 +16,10 @@ func main() {
 		os.Exit(1)
 	}
 	tracefile := os.Args[1]
+	gpxfile := strings.TrimSuffix(tracefile, ".csv") + ".gpx"
 
 	// create gpx file
-	file, err := os.Create("trace.gpx")
+	file, err := os.Create(gpxfile)
 	defer file.Close()
 	if err != nil {
 		log.Fatalln("failed to open file", err)
@@ -44,12 +46,27 @@ func main() {
 		log.Fatal(err)
 	}
 
+	var idxLat int = -1
+	var idxLon int = -1
+
 	for i, row := range tracedata {
 		if i == 0 {
+			for j, col := range row {
+				if col == "lat" {
+					idxLat = j
+				}
+				if col == "lon" {
+					idxLon = j
+				}
+			}
+
+			if idxLat == -1 || idxLon == -1 {
+				log.Panic("error parsing csv file: could not find lat/lon column")
+			}
 			continue
 		}
-		lat, _ := strconv.ParseFloat(row[1], 32)
-		lon, _ := strconv.ParseFloat(row[2], 32)
+		lat, _ := strconv.ParseFloat(row[idxLat], 32)
+		lon, _ := strconv.ParseFloat(row[idxLon], 32)
 		// eph, _ := strconv.ParseFloat(row[4], 32)
 		line := "    <trkpt lat=\"" + strconv.FormatFloat(lat, 'f', 6, 32) + "\" lon=\"" + strconv.FormatFloat(lon, 'f', 6, 32) + "\">\n    </trkpt>\n"
 		if _, err := file.WriteString(line); err != nil {

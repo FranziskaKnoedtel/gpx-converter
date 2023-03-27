@@ -1,0 +1,10 @@
+# GPX Converter
+
+Th gpx-converter is a tool to convert a CSV containing `lat` and `lon` columns to a GPX file.
+
+## Usage
+```
+$ gpx-converter <path-to-csv>
+```
+
+The output file and path is the same as the input file, but with the extension `.gpx`.
