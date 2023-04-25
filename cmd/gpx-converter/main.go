@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -65,10 +64,11 @@ func main() {
 			}
 			continue
 		}
-		lat, _ := strconv.ParseFloat(row[idxLat], 32)
-		lon, _ := strconv.ParseFloat(row[idxLon], 32)
-		// eph, _ := strconv.ParseFloat(row[4], 32)
-		line := "    <trkpt lat=\"" + strconv.FormatFloat(lat, 'f', 6, 32) + "\" lon=\"" + strconv.FormatFloat(lon, 'f', 6, 32) + "\">\n    </trkpt>\n"
+		if row[idxLat] == "NaN" || row[idxLon] == "NaN" || row[idxLat] == "-Inf" || row[idxLon] == "-Inf" || row[idxLat] == "Inf" || row[idxLon] == "Inf" {
+			log.Println("WARNING: skipping row ", i, " due to NaN/Inf values")
+			continue
+		}
+		line := "    <trkpt lat=\"" + row[idxLat] + "\" lon=\"" + row[idxLon] + "\">\n    </trkpt>\n"
 		if _, err := file.WriteString(line); err != nil {
 			log.Fatalln("error writing line to file", err)
 		}
